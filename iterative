@@ -1,0 +1,25 @@
+def factorial(n):
+    # Initialize the result to 1 (the factorial of 0 is 1)
+    result = 1
+    
+    # Iterate from 1 to n and multiply the result by each number in the range
+    for i in range(1, n + 1):
+        result *= i
+    
+    return result
+
+# Example usage
+number = int(input("Enter a number to calculate its factorial: "))
+print(f"The factorial of {number} is: {factorial(number)}")
+
+def factorial_recursive(n):
+    # Base case: factorial of 0 or 1 is 1
+    if n == 0 or n == 1:
+        return 1
+    else:
+        # Recursive case: n * factorial of (n-1)
+        return n * factorial_recursive(n - 1)
+
+# Example usage
+number = int(input("Enter a number to calculate its factorial recursively: "))
+print(f"The factorial of {number} is: {factorial_recursive(number)}")
