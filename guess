@@ -1,0 +1,28 @@
+import random
+
+# Function to play the game
+def play_game(limit):
+    # Generate a random number between 1 and the limit
+    random_number = random.randint(1, limit)
+    
+    # Display the range to the user
+    print(f"Guess a number between 1 and {limit}. Try to guess the number!")
+
+# Main program
+def main():
+    # Prompt user for the limit
+    try:
+        limit = int(input("Enter the limit (maximum number for the range): "))
+        
+        if limit <= 1:
+            print("Please enter a number greater than 1.")
+        else:
+            # Call the play_game function with the limit
+            play_game(limit)
+    
+    except ValueError:
+        print("Invalid input. Please enter a valid integer.")
+
+# Run the program
+if __name__ == "__main__":
+    main()
