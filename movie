@@ -1,0 +1,68 @@
+def display_menu():
+    # Display a heading and menu choices
+    print("\n==== Movie List Menu ====")
+    print("1. Display all movie titles")
+    print("2. Add a movie title")
+    print("3. Delete a movie title")
+    print("4. Exit")
+    print("=========================\n")
+
+def display_movies(movie_list):
+    # Display all movie titles in the list
+    if movie_list:
+        print("\nCurrent Movie Titles:")
+        for index, title in enumerate(movie_list, 1):
+            print(f"{index}. {title}")
+    else:
+        print("\nNo movies in the list.")
+
+def add_movie(movie_list):
+    # Add a new movie to the list
+    title = input("Enter the movie title you want to add: ")
+    movie_list.append(title)
+    print(f"'{title}' has been added to the list.")
+
+def delete_movie(movie_list):
+    # Delete a movie from the list
+    display_movies(movie_list)
+    try:
+        choice = int(input("\nEnter the number of the movie to delete: "))
+        if 1 <= choice <= len(movie_list):
+            removed_title = movie_list.pop(choice - 1)
+            print(f"'{removed_title}' has been deleted.")
+        else:
+            print("Invalid movie number. Please try again.")
+    except ValueError:
+        print("Invalid input. Please enter a number.")
+
+def main():
+    # Initial movie list with at least three titles
+    movie_list = ["The Shawshank Redemption", "The Godfather", "The Dark Knight"]
+    
+    while True:
+        # Display the menu
+        display_menu()
+        
+        # Get user's choice
+        try:
+            choice = int(input("Enter your choice (1-4): "))
+            if choice == 1:
+                # Display all movies
+                display_movies(movie_list)
+            elif choice == 2:
+                # Add a new movie
+                add_movie(movie_list)
+            elif choice == 3:
+                # Delete a movie
+                delete_movie(movie_list)
+            elif choice == 4:
+                # Exit the program
+                print("Exiting the program. Goodbye!")
+                break
+            else:
+                print("Invalid command. Please choose a number between 1 and 4.")
+        except ValueError:
+            print("Invalid input. Please enter a number between 1 and 4.")
+
+if __name__ == "__main__":
+    main()
