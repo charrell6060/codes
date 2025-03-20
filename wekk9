@@ -1,0 +1,103 @@
+# Function to create and open the 'User Data' text file
+def create_or_open_file(filename):
+    try:
+        # Open the file in append mode to add data without overwriting existing data
+        file = open(filename, 'a+')
+        return file
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+
+# Function to read existing user IDs from the file
+def read_user_ids(file):
+    user_ids = []
+    # Move the file pointer to the beginning in case it's opened in append mode
+    file.seek(0)
+    # Read each line from the file
+    for line in file:
+        # Split line into fields (assuming a format of "ID: name" for simplicity)
+        data = line.strip().split(":")
+        if len(data) > 1:
+            user_ids.append(data[0])  # Assume the ID is the first part of the line
+    return user_ids
+
+# Function to write new user data to the file
+def write_user_data(file, user_id, user_name):
+    file.write(f"{user_id}: {user_name}\n")
+
+# Function to load user data from the file
+def load_user_data(filename):
+    user_data = {}
+    try:
+        with open(filename, 'r') as file:
+            for line in file:
+                user_id, password, auth_code = line.strip().split('|')
+                user_data[user_id] = (password, auth_code)
+    except FileNotFoundError:
+        pass
+    return user_data
+
+# Function to add a new user
+def add_user(filename, user_data):
+    while True:
+        user_id = input("Enter user ID (or type 'End' to stop): ")
+        if user_id.lower() == 'end':
+            break
+        if user_id in user_data:
+            print("User ID already exists. Try again.")
+            continue
+
+        password = input("Enter password: ")
+        auth_code = input("Enter authorization code (Admin/User): ").capitalize()
+
+        if auth_code not in ["Admin", "User"]:
+            print("Invalid authorization code. Try again.")
+            continue
+
+        # Add the user to the file and the user_data dictionary
+        with open(filename, 'a') as file:
+            file.write(f"{user_id}|{password}|{auth_code}\n")
+        
+        user_data[user_id] = (password, auth_code)
+        print(f"User '{user_id}' added successfully!")
+
+# Function to display all user data
+def display_users(user_data):
+    for user_id, (password, auth_code) in user_data.items():
+        print(f"User ID: {user_id}, Password: {password}, Authorization Code: {auth_code}")
+
+# Function to log in and check user credentials
+def login(filename):
+    user_data = load_user_data(filename)
+
+    user_id = input("Enter your user ID: ")
+    if user_id not in user_data:
+        print("User ID not found.")
+        return
+    
+    password = input("Enter your password: ")
+    stored_password, auth_code = user_data[user_id]
+    if password != stored_password:
+        print("Incorrect password.")
+        return
+
+    print(f"Logged in as {auth_code} user.")
+    if auth_code == "Admin":
+        print("You can display and modify data.")
+    else:
+        print("You can only display data.")
+    display_users(user_data)
+
+# Main function to drive the program
+def main():
+    filename = 'user_data.txt'
+    user_data = load_user_data(filename)
+
+    # Add new users
+    add_user(filename, user_data)
+
+    # Login process
+    login(filename)
+
+if __name__ == '__main__':
+    main()
