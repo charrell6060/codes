@@ -1,0 +1,31 @@
+def get_price():
+    while True:
+        try:
+            return float(input("Enter the price: $"))
+        except ValueError:
+            print("Invalid price. Please enter a valid number.")
+
+def get_quantity():
+    while True:
+        try:
+            return int(input("Enter the quantity: "))
+        except ValueError:
+            print("Invalid quantity. Please enter an integer.")
+
+def main():
+    print("Invoice Program")
+    
+    while True:
+        price = get_price()
+        quantity = get_quantity()
+        
+        total = price * quantity
+        print(f"Price: ${price:.2f}, Quantity: {quantity}, Total: ${total:.2f}")
+        
+        if input("Another line item? (y/n): ").strip().lower() != 'y':
+            break
+
+    print("End of Invoice.")
+
+if __name__ == "__main__":
+    main()
