@@ -1,0 +1,17 @@
+class Rectangle:
+    def __init__(self, height, width):
+        self.height = height
+        self.width = width
+
+    def calculate_perimeter(self):
+        return 2 * (self.height + self.width)
+
+    def calculate_area(self):
+        return self.height * self.width
+
+    def print_details(self):
+        print("This is a rectangle.")
+        print("Height:", self.height)
+        print("Width:", self.width)
+        print("Area:", self.calculate_area())
+        print("Perimeter:", self.calculate_perimeter())
