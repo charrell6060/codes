@@ -1,0 +1,55 @@
+def get_input(prompt):
+    return input(prompt)
+
+def get_valid_input(prompt, is_float=True):
+    while True:
+        try:
+            value = float(input(prompt)) if is_float else input(prompt)
+            if value < 0:
+                print("Value must be positive. Try again.")
+            else:
+                return value
+        except ValueError:
+            print("Invalid input. Please try again.")
+
+def calculate_pay(hours, rate, tax_rate):
+    gross_pay = hours * rate
+    tax = gross_pay * tax_rate
+    net_pay = gross_pay - tax
+    return gross_pay, tax, net_pay
+
+def display_employee_info(name, hours, rate, gross, tax_rate, tax, net):
+    print(f"\nEmployee: {name}")
+    print(f"Hours: {hours}, Rate: ${rate}, Gross: ${gross}, Tax Rate: {tax_rate*100}%, Tax: ${tax}, Net: ${net}")
+
+def display_totals(employee_count, total_hours, total_gross, total_tax, total_net):
+    print("\n--- Total Summary ---")
+    print(f"Employees: {employee_count}, Total Hours: {total_hours}, Gross Pay: ${total_gross}, Tax: ${total_tax}, Net Pay: ${total_net}")
+
+def main():
+    employee_count = 0
+    total_hours = total_gross = total_tax = total_net = 0
+
+    while True:
+        name = get_input("Enter employee's name (or 'End' to quit): ")
+        if name.lower() == "end":
+            break
+
+        hours = get_valid_input("Enter total hours worked: ")
+        rate = get_valid_input("Enter hourly rate: ")
+        tax_rate = get_valid_input("Enter income tax rate (in percentage): ") / 100
+
+        gross, tax, net = calculate_pay(hours, rate, tax_rate)
+        display_employee_info(name, hours, rate, gross, tax_rate, tax, net)
+
+        employee_count += 1
+        total_hours += hours
+        total_gross += gross
+        total_tax += tax
+        total_net += net
+
+    display_totals(employee_count, total_hours, total_gross, total_tax, total_net)
+    print("\nProgram terminated.")
+
+if __name__ == "__main__":
+    main()
