@@ -1,0 +1,62 @@
+import random
+
+# Card class
+class Card:
+    def __init__(self, rank, suit):
+        self.rank = rank
+        self.suit = suit
+
+    def __str__(self):
+        return f"{self.rank} of {self.suit}"
+
+# Deck class
+class Deck:
+    def __init__(self):
+        self.deck = []
+        suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+        ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
+        # Create a deck of 52 cards
+        self.deck = [Card(rank, suit) for suit in suits for rank in ranks]
+
+    def shuffle(self):
+        random.shuffle(self.deck)
+
+    def deal(self, num_cards):
+        if num_cards > len(self.deck):
+            print("Not enough cards left!")
+            return []
+        dealt_cards = self.deck[:num_cards]
+        self.deck = self.deck[num_cards:]
+        return dealt_cards
+
+    def count(self):
+        return len(self.deck)
+
+# Main game function
+def main():
+    print("Deck of cards game")
+    
+    # Create and shuffle the deck
+    deck = Deck()
+    deck.shuffle()
+
+    # Ask the user how many cards they want
+    num_cards = int(input("How many cards would you like to pick? "))
+
+    # Deal the cards
+    dealt_cards = deck.deal(num_cards)
+    
+    # Display the dealt cards
+    print("\nYou picked the following cards:")
+    for card in dealt_cards:
+        print(card)
+
+    # Display how many cards are left in the deck
+    print(f"\nCards left in the deck: {deck.count()}")
+
+    # Wish the player good luck
+    print("Good luck!")
+
+# Run the game
+if __name__ == "__main__":
+    main()
