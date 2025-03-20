@@ -1,0 +1,40 @@
+import random
+def __init__(self, suit, number):
+    self.suit = suit
+    self.number = number
+
+def display(self):
+    print(f"{self.number} of {self.suit}")
+def __init__(self) -> None:
+    self.deck = []
+
+    suits = ['♥️', '♣️', '♠️', '♦️']
+    numbers = [2, 3, 4, 5, 6, 7, 8, 9, 10, "A", "J", "K", "Q"]
+    
+    for suit in suits:
+        for number in numbers:
+            currentcard = Card(suit, number)
+            self.deck.append(currentcard)
+
+def draw(self):
+    '''
+    draws a random card without removing it from the deck
+    '''
+    index = random.randint(0,51)
+    print(f'{self.deck[index].suit} {self.deck[index].number}')
+
+def pop(self):
+    '''
+    draws a random card and it's removed from the deck
+    '''
+    index = random.randint(0,51)
+    poped = self.deck.pop(index)
+
+    print(f'{poped.suit} {poped.number}')
+
+def reveal(self):
+    '''
+    shows each card in the deck
+    '''
+    for card in self.deck:
+        print (f'{card.suit} {card.number}')
