@@ -1,0 +1,101 @@
+import os
+import datetime
+
+# Function to add employee data to the file
+def add_employee_to_file(file_name):
+    with open(file_name, 'a') as file:
+        while True:
+            from_date = input("Enter from date (mm/dd/yyyy or 'exit' to quit): ")
+            if from_date.lower() == 'exit':
+                break
+
+            # Validate date format
+            try:
+                datetime.datetime.strptime(from_date, '%m/%d/%Y')
+            except ValueError:
+                print("Invalid date format. Please use mm/dd/yyyy.")
+                continue
+
+            to_date = input("Enter to date (mm/dd/yyyy): ")
+            try:
+                datetime.datetime.strptime(to_date, '%m/%d/%Y')
+            except ValueError:
+                print("Invalid date format. Please use mm/dd/yyyy.")
+                continue
+
+            employee_name = input("Enter employee name: ")
+            hours_worked = float(input("Enter hours worked: "))
+            pay_rate = float(input("Enter pay rate: "))
+            income_tax_rate = float(input("Enter income tax rate (as percentage): "))
+
+            # Calculate gross pay, income tax, and net pay
+            gross_pay = hours_worked * pay_rate
+            income_tax = gross_pay * (income_tax_rate / 100)
+            net_pay = gross_pay - income_tax
+
+            # Write to file
+            file.write(f"{from_date}|{to_date}|{employee_name}|{hours_worked}|{pay_rate}|{income_tax_rate}|{gross_pay}|{income_tax}|{net_pay}\n")
+            print("Employee data added successfully!\n")
+
+# Function to generate a report based on user input
+def generate_report(file_name):
+    from_date_input = input("Enter From Date (mm/dd/yyyy) or 'All' for all records: ")
+    
+    # Validate date format if user doesn't input 'All'
+    if from_date_input != "All":
+        try:
+            datetime.datetime.strptime(from_date_input, '%m/%d/%Y')
+        except ValueError:
+            print("Invalid date format. Please use mm/dd/yyyy.")
+            return
+
+    total_employees = total_hours = total_tax = total_net_pay = 0
+
+    # Read file
+    if os.path.exists(file_name):
+        with open(file_name, 'r') as file:
+            for line in file:
+                fields = line.strip().split('|')
+                record_from_date = fields[0]
+                
+                # If user selects "All" or the dates match
+                if from_date_input == "All" or from_date_input == record_from_date:
+                    # Extract employee data
+                    employee_name = fields[2]
+                    hours_worked = float(fields[3])
+                    pay_rate = float(fields[4])
+                    gross_pay = float(fields[6])
+                    income_tax = float(fields[7])
+                    net_pay = float(fields[8])
+
+                    # Print details for each employee
+                    print(f"From Date: {fields[0]}, To Date: {fields[1]}")
+                    print(f"Employee: {employee_name}, Hours Worked: {hours_worked}, Hourly Rate: {pay_rate}")
+                    print(f"Gross Pay: {gross_pay}, Income Tax: {income_tax}, Net Pay: {net_pay}\n")
+
+                    # Increment totals
+                    total_employees += 1
+                    total_hours += hours_worked
+                    total_tax += income_tax
+                    total_net_pay += net_pay
+    
+    # Print totals after loop
+    print("\n--- Total Report ---")
+    print(f"Total Employees: {total_employees}")
+    print(f"Total Hours Worked: {total_hours}")
+    print(f"Total Income Tax: {total_tax}")
+    print(f"Total Net Pay: {total_net_pay}")
+
+# Main function to execute the program
+def main():
+    file_name = "employee_data.txt"
+    
+    # Add employee data to file
+    add_employee_to_file(file_name)
+    
+    # Generate the report
+    generate_report(file_name)
+
+# Run the main function
+if __name__ == "__main__":
+    main()
