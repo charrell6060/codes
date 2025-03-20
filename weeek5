@@ -1,0 +1,90 @@
+def get_date_range():
+    # Get from and to dates
+    from_date = input("Enter from date (mm/dd/yyyy): ")
+    to_date = input("Enter to date (mm/dd/yyyy): ")
+    return from_date, to_date
+
+def get_input(prompt):
+    # Get positive numeric input
+    while True:
+        try:
+            value = float(input(prompt))
+            if value < 0:
+                print("Value must be positive.")
+            else:
+                return value
+        except ValueError:
+            print("Invalid input. Please try again.")
+
+def calculate_pay(hours, rate, tax_rate):
+    # Calculate gross, tax, and net pay
+    gross = hours * rate
+    tax = gross * tax_rate
+    net = gross - tax
+    return gross, tax, net
+
+def display_employee_info(from_date, to_date, name, hours, rate, gross, tax, net):
+    # Display employee pay details
+    print(f"\nFrom: {from_date}, To: {to_date}")
+    print(f"Employee: {name}")
+    print(f"Hours Worked: {hours}, Rate: ${rate}, Gross: ${gross}, Tax: ${tax}, Net: ${net}")
+
+def display_totals(employee_data):
+    # Display total summary
+    print("\n--- Total Summary ---")
+    print(f"Employees: {employee_data['total_employees']}")
+    print(f"Total Hours Worked: {employee_data['total_hours']}")
+    print(f"Total Gross Pay: ${employee_data['total_gross_pay']}")
+    print(f"Total Tax: ${employee_data['total_tax']}")
+    print(f"Total Net Pay: ${employee_data['total_net_pay']}")
+
+def main():
+    employee_data = {
+        "total_employees": 0,
+        "total_hours": 0,
+        "total_gross_pay": 0,
+        "total_tax": 0,
+        "total_net_pay": 0
+    }
+    employees = []  # Store employee details
+    
+    while True:
+        from_date, to_date = get_date_range()
+        name = input("Enter employee's name (or 'End' to quit): ")
+        if name.lower() == 'end':
+            break
+        
+        hours = get_input("Enter total hours worked: ")
+        rate = get_input("Enter hourly rate: ")
+        tax_rate = get_input("Enter income tax rate (in percentage): ") / 100
+        
+        gross, tax, net = calculate_pay(hours, rate, tax_rate)
+        
+        # Store employee data
+        employees.append({
+            "from_date": from_date, "to_date": to_date, "name": name,
+            "hours": hours, "rate": rate, "gross": gross, "tax": tax, "net": net
+        })
+        
+        # Update totals
+        employee_data["total_employees"] += 1
+        employee_data["total_hours"] += hours
+        employee_data["total_gross_pay"] += gross
+        employee_data["total_tax"] += tax
+        employee_data["total_net_pay"] += net
+    
+    # Display employee details
+    for employee in employees:
+        display_employee_info(
+            employee["from_date"], employee["to_date"], employee["name"],
+            employee["hours"], employee["rate"], employee["gross"], 
+            employee["tax"], employee["net"]
+        )
+    
+    # Display totals
+    display_totals(employee_data)
+
+    print("\nProgram terminated.")
+
+if __name__ == "__main__":
+    main()
