@@ -1,0 +1,65 @@
+def read_login_file(file_name):
+    """Reads the login information from the file and returns a list of users"""
+    users = []
+    with open(file_name, 'r') as file:
+        for line in file:
+            user_info = line.strip().split(',')
+            # Assuming each line contains userID, password, authorization code
+            users.append({
+                'user_id': user_info[0],
+                'password': user_info[1],
+                'auth_code': user_info[2]
+            })
+    return users
+
+def user_login(users):
+    """Handles the login process"""
+    user_id = input("Enter your User ID: ")
+    password = input("Enter your Password: ")
+
+    # Check if the user exists
+    user = next((u for u in users if u['user_id'] == user_id), None)
+
+    if not user:
+        print("User ID not found. Exiting the application.")
+        return None  # Exit the application
+
+    # Check if password matches
+    if user['password'] != password:
+        print("Incorrect password. Exiting the application.")
+        return None  # Exit the application
+
+    # User found and password matches
+    return user  # Return the user object with user_id, password, and auth_code
+
+def authorization_functionality(user):
+    """Handles authorization based on the user's authorization code"""
+    print(f"Logged in as User ID: {user['user_id']}, Authorization Code: {user['auth_code']}")
+
+    # Admin can enter and display data
+    if user['auth_code'] == "Admin":
+        print("Welcome Admin! You can now enter and display data.")
+        # Implement code to enter and display data for Admin here
+        # Example: data_entry_and_display()
+
+    # User can only display data
+    elif user['auth_code'] == "User":
+        print("Welcome User! You can only display data.")
+        # Implement code to display data for User here
+        # Example: data_display()
+
+def main():
+    # Step 1: Load user data from file
+    file_name = "users.txt"  # Example file name
+    users = read_login_file(file_name)
+
+    # Step 2: User login process
+    user = user_login(users)
+
+    # Step 3: If user is valid, proceed to authorization
+    if user:
+        authorization_functionality(user)
+
+# Run the program
+if __name__ == "__main__":
+    main()
